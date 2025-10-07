@@ -3,7 +3,7 @@ import prisma from '../prismaClient'
 
 const router = Router()
 
-// ✅ Create new user
+// Create new user
 router.post('/', async (req, res) => {
   try {
     const { email, password, firstName, lastName, role } = req.body
@@ -16,13 +16,13 @@ router.post('/', async (req, res) => {
   }
 })
 
-// ✅ Get all users
+// Get all users
 router.get('/', async (_req, res) => {
   const users = await prisma.user.findMany({ include: { payments: true } })
   res.json(users)
 })
 
-// ✅ Get user by ID
+// Get user by ID
 router.get('/:id', async (req, res) => {
   const id = Number(req.params.id)
   const user = await prisma.user.findUnique({
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
   res.json(user)
 })
 
-// ✅ Update user
+// Update user
 router.put('/:id', async (req, res) => {
   const id = Number(req.params.id)
   const { firstName, lastName, role } = req.body
@@ -48,7 +48,7 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-// ✅ Delete user
+// Delete user
 router.delete('/:id', async (req, res) => {
   const id = Number(req.params.id)
   try {

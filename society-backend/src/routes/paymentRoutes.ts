@@ -3,7 +3,7 @@ import prisma from '../prismaClient'
 
 const router = Router()
 
-// ✅ Create payment
+// Create payment
 router.post('/', async (req, res) => {
   try {
     const { amount, status, paidAt, userId } = req.body
@@ -16,13 +16,13 @@ router.post('/', async (req, res) => {
   }
 })
 
-// ✅ Get all payments
+// Get all payments
 router.get('/', async (_req, res) => {
   const payments = await prisma.payment.findMany({ include: { user: true } })
   res.json(payments)
 })
 
-// ✅ Get payments by user ID
+// Get payments by user ID
 router.get('/user/:userId', async (req, res) => {
   const userId = Number(req.params.userId)
   const payments = await prisma.payment.findMany({
@@ -32,7 +32,7 @@ router.get('/user/:userId', async (req, res) => {
   res.json(payments)
 })
 
-// ✅ Update payment status
+// Update payment status
 router.put('/:id', async (req, res) => {
   const id = Number(req.params.id)
   const { status, paidAt } = req.body
@@ -47,7 +47,7 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-// ✅ Delete payment
+// Delete payment
 router.delete('/:id', async (req, res) => {
   const id = Number(req.params.id)
   try {
