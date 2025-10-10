@@ -14,8 +14,49 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  firstName String
+  lastName  String?
+  role      Role      @default(MEMBER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  payments  Payment[]
+
+  @@index([role]) // speeds up role-based queries
+}
+
+model Payment {
+  id        Int           @id @default(autoincrement())
+  amount    Float
+  status    PaymentStatus @default(PENDING)
+  paidAt    DateTime?
+  user      User          @relation(fields: [userId], references: [id])
+  userId    Int
+  month     Month?        @relation(fields: [monthId], references: [id]) // optional relation to Month
+  monthId   Int?
+  createdAt DateTime      @default(now())
+
+  @@index([userId]) // optimize queries for payments by user
+  @@index([monthId]) // optimize queries for payments by month
+}
+
+model Month {
+  id        Int       @id @default(autoincrement())
+  name      String    // e.g. "January 2025"
+  startDate DateTime  // e.g. 2025-01-01
+  endDate   DateTime  // e.g. 2025-01-31
+  payments  Payment[] // all payments linked to this month
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
 }
