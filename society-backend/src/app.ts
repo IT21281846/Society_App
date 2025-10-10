@@ -1,13 +1,17 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user';
+import paymentRoutes from './routes/payments'
+import monthRoutes from './routes/months'
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 
+app.use(express.json());
 app.use('/api/users', userRoutes);
+app.use('/api/payments', paymentRoutes)
+app.use('/api/months', monthRoutes)
 
 app.get('/', (req, res) => {
   res.send('Backend running successfully 🚀');

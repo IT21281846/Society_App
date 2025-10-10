@@ -1,61 +1,48 @@
-import { Router } from 'express'
-import prisma from '../prisma'
+import express from 'express';
+import prisma from '../prisma';
 
-const router = Router()
-
-// Create payment
-router.post('/', async (req, res) => {
-  try {
-    const { amount, status, paidAt, userId } = req.body
-    const payment = await prisma.payment.create({
-      data: { amount, status, paidAt, userId },
-    })
-    res.json(payment)
-  } catch (error) {
-    res.status(400).json({ error: 'Error creating payment', details: error })
-  }
-})
+const router = express.Router();
 
 // Get all payments
-router.get('/', async (_req, res) => {
-  const payments = await prisma.payment.findMany({ include: { user: true } })
-  res.json(payments)
-})
-
-// Get payments by user ID
-router.get('/user/:userId', async (req, res) => {
-  const userId = Number(req.params.userId)
+router.get('/', async (req, res) => {
   const payments = await prisma.payment.findMany({
-    where: { userId },
-    include: { user: true },
-  })
-  res.json(payments)
-})
+    include: { user: true, month: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  res.json(payments);
+});
+
+// Create a new payment
+router.post('/', async (req, res) => {
+  const { amount, userId, monthId } = req.body;
+  try {
+    const payment = await prisma.payment.create({
+      data: {
+        amount,
+        user: { connect: { id: userId } },
+        month: monthId ? { connect: { id: monthId } } : undefined,
+      },
+    });
+    res.json(payment);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: 'Failed to create payment' });
+  }
+});
 
 // Update payment status
-router.put('/:id', async (req, res) => {
-  const id = Number(req.params.id)
-  const { status, paidAt } = req.body
+router.put('/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
   try {
-    const payment = await prisma.payment.update({
-      where: { id },
-      data: { status, paidAt },
-    })
-    res.json(payment)
-  } catch {
-    res.status(400).json({ error: 'Error updating payment' })
+    const updated = await prisma.payment.update({
+      where: { id: Number(id) },
+      data: { status },
+    });
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ error: 'Unable to update payment status' });
   }
-})
+});
 
-// Delete payment
-router.delete('/:id', async (req, res) => {
-  const id = Number(req.params.id)
-  try {
-    await prisma.payment.delete({ where: { id } })
-    res.json({ message: 'Payment deleted' })
-  } catch {
-    res.status(400).json({ error: 'Error deleting payment' })
-  }
-})
-
-export default router
+export default router;
