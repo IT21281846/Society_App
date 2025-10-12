@@ -7,7 +7,7 @@ export default function Navbar() {
   const location = useLocation();
 
   const navLinks = [
-    { path: '/', label: 'Dashboard' },
+    { path: '/Dashboard', label: 'Dashboard' },
     { path: '/users', label: 'Users' },
     { path: '/payments', label: 'Payments' },
   ];
