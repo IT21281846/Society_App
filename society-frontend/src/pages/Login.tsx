@@ -18,9 +18,18 @@ export default function Login() {
   const onSubmit = async (data: LoginForm) => {
     try {
       const res = await api.post('/auth/login', data);
-      setAuth(res.data.user, res.data.token);
-      navigate('/dashboard');
+      const { user, token } = res.data;
+
+      // ✅ Save token in localStorage so apiClient can attach it automatically
+      localStorage.setItem('accessToken', token);
+
+      // ✅ Update global auth context
+      setAuth(user, token);
+
+      // ✅ Navigate to dashboard or users
+      navigate('/users');
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err.response?.data?.error || 'Login failed');
     }
   };
@@ -28,8 +37,9 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded shadow-md w-96">
-        <h2 className="text-2xl mb-4">Login</h2>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
+        <h2 className="text-2xl mb-4 font-bold text-center">Login</h2>
+        {error && <p className="text-red-500 mb-3 text-center">{error}</p>}
+
         <input
           {...register('email')}
           type="email"
@@ -44,7 +54,11 @@ export default function Login() {
           className="w-full mb-3 p-2 border rounded"
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+        >
           Login
         </button>
       </form>
