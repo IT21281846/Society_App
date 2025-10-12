@@ -27,7 +27,7 @@ export default function Login() {
       setAuth(user, token);
 
       // ✅ Navigate to dashboard or users
-      navigate('/users');
+      navigate('/Dashboard');
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.response?.data?.error || 'Login failed');

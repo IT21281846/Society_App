@@ -1,44 +1,75 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const navLinks = [
-    { path: '/Dashboard', label: 'Dashboard' },
+    { path: '/dashboard', label: 'Dashboard' },
     { path: '/users', label: 'Users' },
     { path: '/payments', label: 'Payments' },
   ];
 
+  const handleLogout = () => {
+    logout(); // clear user & token from context
+    localStorage.removeItem('accessToken'); // clear token from local storage
+    navigate('/'); // redirect to login
+  };
+
   return (
     <nav className="bg-gray-900 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-1 py-4 flex items-center justify-between">
         {/* App name */}
-        <div className="text-2xl font-bold">SOCIETY</div>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex space-x-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`hover:text-yellow-400 transition ${
-                location.pathname === link.path ? 'text-yellow-400' : ''
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="text-2xl font-bold pr-6">
+           <Link to="/Dashboard">SOCIETY</Link>
         </div>
 
-        {/* Right-side user icon */}
-        <div className="hidden md:flex items-center space-x-3">
+{/* Desktop navbar content */}
+<div className="hidden md:flex justify-between items-center w-full">
+  {/* Left side: navigation links */}
+  <div className="flex space-x-6">
+    {navLinks.map((link) => (
+      <Link
+        key={link.path}
+        to={link.path}
+        className={`hover:text-yellow-400 transition ${
+          location.pathname === link.path ? 'text-yellow-400' : ''
+        }`}
+      >
+        {link.label}
+      </Link>
+    ))}
+  </div>
+
+  {/* Right side: user info + logout */}
+  <div className="flex items-center space-x-4">
+    {user && (
+      <>
+        <div className="flex items-center space-x-2">
           <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
-            U
+            {user.firstName?.[0]?.toUpperCase() || 'U'}
           </div>
+          <span className="text-sm font-medium">
+            Hello, <span className="text-yellow-400">{user.firstName}</span>
+          </span>
         </div>
+
+        <button
+          onClick={handleLogout}
+          className="bg-yellow-500 hover:bg-red-600 text-black px-3 py-1 rounded-md transition flex items-center font-semibold"
+        >
+          <LogOut size={18} className="mr-1" /> Logout
+        </button>
+      </>
+    )}
+  </div>
+</div>
+
 
         {/* Mobile menu button */}
         <button
@@ -64,6 +95,19 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+
+          {/* Logout button (mobile) */}
+          {user && (
+            <button
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+              className="block w-full text-left bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md"
+            >
+              <LogOut size={18} className="inline mr-1" /> Logout
+            </button>
+          )}
         </div>
       )}
     </nav>
