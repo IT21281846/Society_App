@@ -14,9 +14,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-900 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* App name */}
-        <div className="text-xl font-bold">Society Dashboard</div>
+        <div className="text-2xl font-bold">SOCIETY</div>
 
         {/* Desktop links */}
         <div className="hidden md:flex space-x-6">
