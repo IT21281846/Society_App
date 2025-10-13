@@ -20,14 +20,19 @@ export default function Login() {
       const res = await api.post('/auth/login', data);
       const { user, token } = res.data;
 
-      // ✅ Save token in localStorage so apiClient can attach it automatically
+      // ✅ Save token and role in localStorage
       localStorage.setItem('accessToken', token);
+      localStorage.setItem('role', user.role); // 👈 store user role
 
       // ✅ Update global auth context
       setAuth(user, token);
 
-      // ✅ Navigate to dashboard or users
-      navigate('/Dashboard');
+      // ✅ Navigate based on role
+      if (user.role === 'ADMIN') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.response?.data?.error || 'Login failed');
@@ -36,7 +41,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded shadow-md w-96">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white p-6 rounded shadow-md w-96"
+      >
         <h2 className="text-2xl mb-4 font-bold text-center">Login</h2>
         {error && <p className="text-red-500 mb-3 text-center">{error}</p>}
 

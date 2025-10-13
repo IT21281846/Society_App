@@ -1,6 +1,6 @@
 import express from 'express';
 import prisma from '../prisma';
-import { authenticateToken } from '../middleware/authMiddleware';
+import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -9,5 +9,11 @@ router.get('/', authenticateToken, async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);
 });
+
+// Admin-only route
+router.get('/admin/dashboard', authenticateToken, authorizeAdmin, (req, res) => {
+  res.json({ message: 'Welcome Admin!' });
+});
+
 
 export default router;
