@@ -4,14 +4,13 @@ import Navbar from './components/Navbar';
  import Register from './pages/Register';
  import Dashboard from './pages/Dashboard';
  import Users from './pages/Users';
- import { AuthProvider } from './context/AuthContext';
 
 
 // import Payments from './pages/Payments';
 
 function App() {
   return (
-    <AuthProvider>
+    
     <Router>
       <Navbar/>
       <Routes>
@@ -22,7 +21,7 @@ function App() {
 
       </Routes>
     </Router>
-  </AuthProvider>
+
   );
 }
 

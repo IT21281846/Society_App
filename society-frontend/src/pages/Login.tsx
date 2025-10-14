@@ -29,9 +29,9 @@ export default function Login() {
 
       // ✅ Navigate based on role
       if (user.role === 'ADMIN') {
-        navigate('/admin');
+        navigate('/Dashboard');
       } else {
-        navigate('/dashboard');
+        navigate('/Dashboard');
       }
     } catch (err: any) {
       console.error('Login error:', err);
