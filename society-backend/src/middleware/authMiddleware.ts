@@ -13,11 +13,9 @@ export interface AuthRequest extends Request {
   };
 }
 
-// ✅ Verify token and attach user data to request
+// ✅ Verify token from cookie and attach user data to request
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
-
+  const token = req.cookies.token; // read token from cookie
   if (!token) {
     return res.status(401).json({ error: 'Access denied. Token missing.' });
   }

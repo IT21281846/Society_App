@@ -20,10 +20,6 @@ export default function Login() {
       const res = await api.post('/auth/login', data);
       const { user, token } = res.data;
 
-      // ✅ Save token and role in localStorage
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('role', user.role); // 👈 store user role
-
       // ✅ Update global auth context
       setAuth(user, token);
 

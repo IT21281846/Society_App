@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import api from '../api/apiClient'; // make sure this points to your updated apiClient
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,10 +16,15 @@ export default function Navbar() {
     { path: '/payments', label: 'Payments' },
   ];
 
-  const handleLogout = () => {
-    logout(); // clear user & token from context
-    localStorage.removeItem('accessToken'); // clear token from local storage
-    navigate('/'); // redirect to login
+  // ✅ Updated logout handler for cookie-based auth
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout'); // clear cookie on backend
+      logout(); // clear user from context
+      navigate('/'); // redirect to login
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
   };
 
   return (
@@ -26,50 +32,49 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-1 py-4 flex items-center justify-between">
         {/* App name */}
         <div className="text-2xl font-bold pr-6">
-           <Link to="/Dashboard">SOCIETY</Link>
+          <Link to="/dashboard">SOCIETY</Link>
         </div>
 
-{/* Desktop navbar content */}
-<div className="hidden md:flex justify-between items-center w-full">
-  {/* Left side: navigation links */}
-  <div className="flex space-x-6">
-    {navLinks.map((link) => (
-      <Link
-        key={link.path}
-        to={link.path}
-        className={`hover:text-yellow-400 transition ${
-          location.pathname === link.path ? 'text-yellow-400' : ''
-        }`}
-      >
-        {link.label}
-      </Link>
-    ))}
-  </div>
-
-  {/* Right side: user info + logout */}
-  <div className="flex items-center space-x-4">
-    {user && (
-      <>
-        <div className="flex items-center space-x-2">
-          <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
-            {user.firstName?.[0]?.toUpperCase() || 'U'}
+        {/* Desktop navbar */}
+        <div className="hidden md:flex justify-between items-center w-full">
+          {/* Left: navigation links */}
+          <div className="flex space-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`hover:text-yellow-400 transition ${
+                  location.pathname === link.path ? 'text-yellow-400' : ''
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
-          <span className="text-sm font-medium">
-            Hello, <span className="text-yellow-400">{user.firstName}</span>
-          </span>
+
+          {/* Right: user info + logout */}
+          <div className="flex items-center space-x-4">
+            {user && (
+              <>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
+                    {user.firstName?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                  <span className="text-sm font-medium">
+                    Hello, <span className="text-yellow-400">{user.firstName}</span>
+                  </span>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="bg-yellow-500 hover:bg-red-600 text-black px-3 py-1 rounded-md transition flex items-center font-semibold"
+                >
+                  <LogOut size={18} className="mr-1" /> Logout
+                </button>
+              </>
+            )}
+          </div>
         </div>
-
-        <button
-          onClick={handleLogout}
-          className="bg-yellow-500 hover:bg-red-600 text-black px-3 py-1 rounded-md transition flex items-center font-semibold"
-        >
-          <LogOut size={18} className="mr-1" /> Logout
-        </button>
-      </>
-    )}
-  </div>
-</div>
-
 
         {/* Mobile menu button */}
         <button
@@ -96,7 +101,7 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Logout button (mobile) */}
+          {/* Mobile logout button */}
           {user && (
             <button
               onClick={() => {

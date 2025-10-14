@@ -10,6 +10,7 @@ import authRoutes from './routes/auth';
 dotenv.config();
 
 const app = express();
+app.use(cookieParser());
 
 app.use(
   cors({

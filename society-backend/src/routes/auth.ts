@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Create user with default role 'MEMBER'
+    // Create user with default role 'MEMBER'
     const user = await prisma.user.create({
       data: {
         email,
@@ -64,11 +64,30 @@ router.post('/login', async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.json({ message: 'Login successful', user, token });
+    // Send token in secure HttpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,   // Not accessible from JS
+      secure: true,     // Only over HTTPS (set false if using HTTP locally)
+      sameSite: 'strict', // Prevents CSRF
+      maxAge: 3600000,  // 1 hour
+    });
+
+    // Send user info only
+    res.json({ message: 'Login successful', user });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+// ✅ LOGOUT
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: true,     // false for local dev
+    sameSite: 'strict',
+  });
+  res.json({ message: 'Logged out successfully' });
 });
 
 export default router;
