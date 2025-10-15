@@ -1,6 +1,9 @@
 import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
+
+
+
 interface User {
   id: number;
   email: string;
@@ -26,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(user);
     setToken(token);
   };
+
 
   const logout = () => {
     setUser(null);
