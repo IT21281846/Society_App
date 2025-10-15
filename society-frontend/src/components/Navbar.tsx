@@ -39,7 +39,10 @@ export default function Navbar() {
         <div className="hidden md:flex justify-between items-center w-full">
           {/* Left: navigation links */}
           <div className="flex space-x-6">
-            {navLinks.map((link) => (
+            
+                       {user && (
+              <div className='flex gap-3'>
+                {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -50,6 +53,8 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+              </div>
+            )} 
           </div>
 
           {/* Right: user info + logout */}

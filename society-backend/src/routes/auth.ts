@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
     });
 
     // Send user info only
-    res.json({ message: 'Login successful', user });
+    res.json({ message: 'Login successful', user,token });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Internal server error' });
