@@ -11,7 +11,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   const navLinks = [
-    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/Dashboard', label: 'Dashboard' },
     { path: '/users', label: 'Users' },
     { path: '/payments', label: 'Payments' },
   ];
@@ -32,7 +32,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-1 py-4 flex items-center justify-between">
         {/* App name */}
         <div className="text-2xl font-bold pr-6">
-          <Link to="/dashboard">SOCIETY</Link>
+          <Link to="/Dashboard">SOCIETY</Link>
         </div>
 
         {/* Desktop navbar */}
