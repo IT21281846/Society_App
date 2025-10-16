@@ -3,6 +3,7 @@ import api from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Background from '../assets/Background.jpg'
 
 interface LoginForm {
   email: string;
@@ -36,7 +37,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+        className="w-full bg-no-repeat bg-center bg-cover flex items-center justify-center relative"
+        style={{
+        backgroundImage: `url(${Background})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: 'calc(100vh - 64px)', // ✅ Fit perfectly below navbar
+      }}
+    >
+      
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-6 rounded shadow-md w-96"

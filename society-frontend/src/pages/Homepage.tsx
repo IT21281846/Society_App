@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Background from '../assets/Background.jpg'
 
@@ -7,23 +7,24 @@ export default function HomePage() {
 
   return (
     <div
-      className="min-h-screen w-full bg-no-repeat bg-center bg-cover flex items-center justify-center relative"
-      style={{
+        className="w-full bg-no-repeat bg-center bg-cover flex items-center justify-center relative"
+        style={{
         backgroundImage: `url(${Background})`,
-        backgroundSize: 'cover', // ✅ makes sure it covers the entire screen
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
+        height: 'calc(100vh - 64px)', // ✅ Fit perfectly below navbar
       }}
     >
 
 
 
       {/* Content */}
-      <div className="relative z-10 text-center text-white p-8 rounded-xl shadow-2xl bg-white/10 backdrop-blur-md">
+      <div className="relative z-10 text-center text-gray-900 p-8 rounded-xl shadow-2xl backdrop-blur-2xl">
         <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-          Welcome to ABC Society
+          Welcome to The Society
         </h1>
         <p className="mb-8 text-lg md:text-xl drop-shadow-md">
-          Manage members, payments, and more all in one place.
+          Strength in Unity, Purpose in Action.
         </p>
 
         <div className="flex flex-col md:flex-row gap-4 justify-center">
