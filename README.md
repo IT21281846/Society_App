@@ -41,23 +41,21 @@ A full-stack web application for managing society members, payments, and admin o
 
 ### 1️⃣ Clone the repository
 
-git clone https://github.com/your-username/society-management.git
-cd society-management
+- git clone https://github.com/your-username/society-management.git
+- cd society-management
 
 ### 2️⃣ Backend setup
-cd society-backend
-npm install
-npx prisma migrate dev
-npm run dev
+- cd society-backend
+- npm install
+- npx prisma migrate dev
+- npm run dev
 
 ### 3️⃣ Frontend setup
-cd society-frontend
-npm install
-npm run dev
+- cd society-frontend
+- npm install
+- npm run dev
 
-Environment Variables
+Environment Variables ( In society-backend/.env: )
 
-In society-backend/.env:
-
-DATABASE_URL=postgresql://user:password@localhost:5432/societydb
-JWT_SECRET=your_secret_key
+- DATABASE_URL=postgresql://user:password@localhost:5432/societydb
+- JWT_SECRET=your_secret_key
