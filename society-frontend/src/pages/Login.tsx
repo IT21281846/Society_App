@@ -3,6 +3,7 @@ import api from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { User , Lock } from 'lucide-react';
 import Background from '../assets/Background.jpg'
 
 interface LoginForm {
@@ -49,32 +50,50 @@ export default function Login() {
       
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-6 rounded shadow-md w-96"
-      >
+        className="bg-white p-6 rounded shadow-md w-96">
         <h2 className="text-2xl mb-4 font-bold text-center">Login</h2>
         {error && <p className="text-red-500 mb-3 text-center">{error}</p>}
-
+      
+      <div className='relative'>
+      <User className="absolute left-1 top-9  text-gray-600 w-5 h-5 " />
+      <label className="block text-gray-700 font-medium mb-1">Email</label>
         <input
           {...register('email')}
           type="email"
           placeholder="Email"
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full mb-3 p-2 pl-10 border rounded"
           required
         />
+        </div>
+        <div className='relative'>
+       <Lock className="absolute left-1 top-10  text-gray-600 w-5 h-5 " />
+        <label className="block text-gray-700 font-medium mb-1">Password</label>
         <input
           {...register('password')}
           type="password"
           placeholder="Password"
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full mb-3 p-2 pl-10 border rounded"
           required
         />
-
+        </div>
+        <div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-        >
+          className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-700 transition duration-300 font-semibold text-lg">
           Login
         </button>
+        </div>
+        <div>
+          <label className="px-5 pt-4 block text-gray-700 font-medium mb-1">Don't have an account ?   Please Register.</label>
+          <div className='flex justify-center' >
+        <button
+            onClick={() => navigate('/register')}
+            className="px-5 py-2 bg-blue-500 hover:bg-blue-700 rounded-full shadow-lg transition duration-300 font-semibold text-lg"
+          >
+            Register
+          </button>
+          </div>
+        </div>
       </form>
     </div>
   );
