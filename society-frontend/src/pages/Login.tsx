@@ -55,7 +55,7 @@ export default function Login() {
         {error && <p className="text-red-500 mb-3 text-center">{error}</p>}
       
       <div className='relative'>
-      <User className="absolute left-1 top-9  text-gray-600 w-5 h-5 " />
+      <User className="absolute left-2 top-9  text-gray-600 w-5 h-5 " />
       <label className="block text-gray-700 font-medium mb-1">Email</label>
         <input
           {...register('email')}
@@ -66,7 +66,7 @@ export default function Login() {
         />
         </div>
         <div className='relative'>
-       <Lock className="absolute left-1 top-10  text-gray-600 w-5 h-5 " />
+       <Lock className="absolute left-2 top-10  text-gray-600 w-5 h-5 " />
         <label className="block text-gray-700 font-medium mb-1">Password</label>
         <input
           {...register('password')}

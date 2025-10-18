@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './context/ProtectedRoute';
  import Login from './pages/Login';
  import Register from './pages/Register';
- import Dashboard from './pages/Dashboard';
+ import Dashboard from './pages/Dashboard/Dashboard';
  import Users from './pages/Users';
  import HomePage from './pages/Homepage';
 

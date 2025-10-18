@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import api from '../api/apiClient';
+import api from '../../api/apiClient';
+import CalendarCard from '../Dashboard/CalendarCard';
 
 
 interface User {
@@ -68,6 +69,10 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold">Failed Payments</h2>
           <p className="text-2xl">{failedPayments}</p>
         </div>
+      </div>
+
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <CalendarCard />
       </div>
 
       {/* Recent Users */}
