@@ -6,6 +6,7 @@ import userRoutes from './routes/user';
 import paymentRoutes from './routes/payments'
 import monthRoutes from './routes/months'
 import authRoutes from './routes/auth';
+import eventRoutes from './routes/event'
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes)
 app.use('/api/months', monthRoutes)
+app.use("/api/events", eventRoutes);
 
 app.get('/', (req, res) => {
   res.send('Backend running successfully 🚀');

@@ -50,6 +50,16 @@ model Month {
   payments  Payment[] // all payments linked to this month
 }
 
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  date        DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
 enum Role {
   ADMIN
   MEMBER
