@@ -1,29 +1,62 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
-
-const events = [
-  { date: "2025-10-20", title: "Board Meeting" },
-  { date: "2025-10-22", title: "Team Outing" },
-  { date: "2025-10-25", title: "Project Deadline" },
-];
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Calendar, Plus, Trash2 } from "lucide-react";
+import api from '../../api/apiClient';
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function CalendarCard() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [newEvent, setNewEvent] = useState({ title: "", date: "" });
 
+  // 🟢 Fetch events from backend
+  const fetchEvents = async () => {
+    try {
+      const res = await api.get("/events");
+      setEvents(res.data);
+    } catch (err) {
+      console.error("❌ Error fetching events:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  // 🟢 Add new event
+  const addEvent = async () => {
+    if (!newEvent.title || !newEvent.date)
+      return alert("Please fill in both title and date");
+
+    try {
+      await api.post("/events", newEvent);
+      setNewEvent({ title: "", date: "" });
+      fetchEvents();
+    } catch (err) {
+      console.error("❌ Error adding event:", err);
+    }
+  };
+
+  // 🟢 Delete event
+  const deleteEvent = async (id: number) => {
+    try {
+      await api.delete(`/events/${id}`);
+      fetchEvents();
+    } catch (err) {
+      console.error("❌ Error deleting event:", err);
+    }
+  };
+
+  // 🗓️ Calendar logic
   const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-  const startDay = monthStart.getDay(); // index of first day
+  const startDay = monthStart.getDay();
   const daysInMonth = monthEnd.getDate();
 
-  const prevMonth = () => {
+  const prevMonth = () =>
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  };
-
-  const nextMonth = () => {
+  const nextMonth = () =>
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  };
 
   const isToday = (day: number) => {
     const today = new Date();
@@ -39,7 +72,7 @@ export default function CalendarCard() {
       2,
       "0"
     )}-${String(day).padStart(2, "0")}`;
-    return events.filter((e) => e.date === dateStr);
+    return events.filter((e: any) => e.date.startsWith(dateStr));
   };
 
   const daysArray = [];
@@ -47,7 +80,7 @@ export default function CalendarCard() {
   for (let i = 1; i <= daysInMonth; i++) daysArray.push(i);
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md w-full">
+    <div className="bg-white p-5 rounded-2xl shadow-md w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center text-lg font-semibold text-gray-700">
@@ -64,6 +97,29 @@ export default function CalendarCard() {
         </div>
       </div>
 
+      {/* Add Event Form */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Event title"
+          value={newEvent.title}
+          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+          className="border rounded p-2 flex-1"
+        />
+        <input
+          type="date"
+          value={newEvent.date}
+          onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+          className="border rounded p-2"
+        />
+        <button
+          onClick={addEvent}
+          className="flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg"
+        >
+          <Plus className="w-4 h-4" /> Add
+        </button>
+      </div>
+
       {/* Days of Week */}
       <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-500 mb-2">
         {daysOfWeek.map((day) => (
@@ -76,20 +132,24 @@ export default function CalendarCard() {
         {daysArray.map((day, idx) => (
           <div
             key={idx}
-            className={`h-16 p-1 flex flex-col items-center border rounded ${
+            className={`h-20 p-1 flex flex-col items-center border rounded relative ${
               isToday(day || 0) ? "bg-blue-100 border-blue-400" : "border-gray-200"
             }`}
           >
             <span className="text-sm font-medium">{day}</span>
+
             {/* Events */}
             {day &&
-              getEventsForDay(day).map((event, i) => (
-                <span
-                  key={i}
-                  className="bg-blue-500 text-white text-xs px-1 rounded mt-1 truncate w-full text-center"
+              getEventsForDay(day).map((event: any) => (
+                <div
+                  key={event.id}
+                  className="bg-blue-500 text-white text-xs px-1 rounded mt-1 truncate w-full text-center flex justify-between items-center"
                 >
-                  {event.title}
-                </span>
+                  <span>{event.title}</span>
+                  <button onClick={() => deleteEvent(event.id)}>
+                    <Trash2 className="w-3 h-3 ml-1 text-white hover:text-red-300" />
+                  </button>
+                </div>
               ))}
           </div>
         ))}
