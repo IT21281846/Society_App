@@ -142,31 +142,31 @@ export default function CalendarCard() {
 
       {/* Add/Edit Event */}
       
-<div className="flex flex-col sm:flex-row gap-2 mb-4 mx-auto">
+<div className="flex flex-col h-9 sm:flex-row gap-1 mb-4 mx-auto">
       <input
         type="text"
         placeholder="Event title"
         value={newEvent.title}
         onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-        className="border p-2 rounded w-full sm:w-1/2"
+        className="border p-2 rounded w-full "
       />
       <input
         type="date"
         value={newEvent.date}
         onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-        className="border p-1 rounded w-full sm:w-4/10"
+        className="border p-1 text-xs rounded w-full sm:w-3/10"
       />
   {editingEvent ? (
-      <div className="flex gap-1">
+      <div className="flex gap-1 ">
           <button
             onClick={saveEdit}
-            className="bg-green-500 text-white px-3 py-2 rounded flex items-center">
-            <Save className="w-4 h-4 mr-1" /> Save
+            className="bg-green-500 text-white text-xs px-2 py-1 hover:bg-green-600 rounded flex items-center">
+            <Save className="w-3 h-3 mr-1" /> Save
           </button>
           <button
             onClick={cancelEdit}
-            className="bg-gray-400 text-white px-2 py-2 rounded flex items-center">
-            <X className="w-4 h-4 mr-1" /> Cancel
+            className="bg-red-500  text-white text-xs px-1 py-1 hover:bg-red-600 rounded flex items-center">
+            <X className="w-3 h-3 " /> Cancel
           </button>
       </div>
         ) : (
@@ -191,7 +191,7 @@ export default function CalendarCard() {
         {daysArray.map((day, idx) => (
           <div
             key={idx}
-            className={`h-12 p-1 flex flex-col items-center justify-start border rounded ${
+            className={`h-10 p-1 flex flex-col items-center justify-start border rounded ${
               isToday(day || 0) ? "bg-blue-100 border-blue-400" : "border-gray-200"
             }`}
           >
