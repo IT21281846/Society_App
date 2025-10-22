@@ -9,6 +9,10 @@ type EventType = {
   date: string;
 };
 
+interface User {
+  role: string;
+}
+
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function CalendarCard() {
@@ -16,6 +20,14 @@ export default function CalendarCard() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [newEvent, setNewEvent] = useState({ title: "", date: "" });
   const [editingEvent, setEditingEvent] = useState<EventType | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+
+  //fetch users
+  useEffect(() => {
+    api.get('/users')
+      .then(res => setUsers(res.data))
+      .catch(err => console.error('Failed to fetch users:', err))
+  }, []);
 
   // Fetch events
   useEffect(() => {
@@ -236,7 +248,7 @@ export default function CalendarCard() {
                       className="text-red-500 hover:text-red-700 flex items-center gap-1"
                     >
                       <Trash2 className="w-4 h-4" /> Delete
-                    </button>
+                    </button>          
                   </div>
                 </li>
               ))}
