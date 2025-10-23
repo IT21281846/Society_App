@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Calendar, Edit3, Trash2, Save, X } from "lucide-react";
+import { useAuth } from '../../context/AuthContext';
 import api from "../../api/apiClient";
 
 type EventType = {
@@ -9,9 +10,7 @@ type EventType = {
   date: string;
 };
 
-interface User {
-  role: string;
-}
+
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -20,14 +19,8 @@ export default function CalendarCard() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [newEvent, setNewEvent] = useState({ title: "", date: "" });
   const [editingEvent, setEditingEvent] = useState<EventType | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const { user } = useAuth();
 
-  //fetch users
-  useEffect(() => {
-    api.get('/users')
-      .then(res => setUsers(res.data))
-      .catch(err => console.error('Failed to fetch users:', err))
-  }, []);
 
   // Fetch events
   useEffect(() => {
@@ -154,42 +147,46 @@ export default function CalendarCard() {
 
       {/* Add/Edit Event */}
       
-<div className="flex flex-col h-9 sm:flex-row gap-1 mb-4 mx-auto">
-      <input
-        type="text"
-        placeholder="Event title"
-        value={newEvent.title}
-        onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-        className="border p-2 rounded w-full "
-      />
-      <input
-        type="date"
-        value={newEvent.date}
-        onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-        className="border p-1 text-xs rounded w-full sm:w-3/10"
-      />
-  {editingEvent ? (
-      <div className="flex gap-1 ">
-          <button
-            onClick={saveEdit}
-            className="bg-green-500 text-white text-xs px-2 py-1 hover:bg-green-600 rounded flex items-center">
-            <Save className="w-3 h-3 mr-1" /> Save
-          </button>
-          <button
-            onClick={cancelEdit}
-            className="bg-red-500  text-white text-xs px-1 py-1 hover:bg-red-600 rounded flex items-center">
-            <X className="w-3 h-3 " /> Cancel
-          </button>
+{user?.role === "ADMIN" && (
+  <div className="flex flex-col h-9 sm:flex-row gap-1 mb-4 mx-auto">
+    <input
+      type="text"
+      placeholder="Event title"
+      value={newEvent.title}
+      onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+      className="border p-2 rounded w-full"
+    />
+    <input
+      type="date"
+      value={newEvent.date}
+      onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+      className="border p-1 text-xs rounded w-full sm:w-3/10"
+    />
+    {editingEvent ? (
+      <div className="flex gap-1">
+        <button
+          onClick={saveEdit}
+          className="bg-green-500 text-white text-xs px-2 py-1 hover:bg-green-600 rounded flex items-center"
+        >
+          <Save className="w-3 h-3 mr-1" /> Save
+        </button>
+        <button
+          onClick={cancelEdit}
+          className="bg-red-500 text-white text-xs px-1 py-1 hover:bg-red-600 rounded flex items-center"
+        >
+          <X className="w-3 h-3 " /> Cancel
+        </button>
       </div>
-        ) : (
-          <button
-            onClick={addEvent}
-            className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
-          >
-            Add
-          </button>
-        )}
-</div>
+    ) : (
+      <button
+        onClick={addEvent}
+        className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
+      >
+        Add
+      </button>
+    )}
+  </div>
+)}
 
       {/* Days of Week */}
       <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-500 mb-2">
@@ -236,7 +233,8 @@ export default function CalendarCard() {
                       {new Date(event.date).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="flex gap-3">
+        {user?.role === "ADMIN" && (
+                <div className="flex gap-3">
                     <button
                       onClick={() => startEdit(event)}
                       className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
@@ -249,7 +247,7 @@ export default function CalendarCard() {
                     >
                       <Trash2 className="w-4 h-4" /> Delete
                     </button>          
-                  </div>
+                  </div>) }                  
                 </li>
               ))}
           </ul>
