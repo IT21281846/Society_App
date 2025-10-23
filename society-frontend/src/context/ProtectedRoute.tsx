@@ -4,21 +4,30 @@ import { useAuth } from './AuthContext';
 
 interface Props {
   children: React.ReactNode;
+  requiredRole?: string; // 👈 optional role restriction
 }
 
-const ProtectedRoute: React.FC<Props> = ({ children }) => {
+const ProtectedRoute: React.FC<Props> = ({ children, requiredRole }) => {
   const navigate = useNavigate();
-  const { token, loading } = useAuth();
+  const { user, token, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !token) {
-      navigate('/'); // redirect only after loading finishes
+    // Wait until auth finishes loading
+    if (!loading) {
+      if (!token) {
+        // 🚫 Not logged in → redirect to login
+        navigate('/');
+      } else if (requiredRole && user?.role !== requiredRole) {
+        // 🚫 Logged in but doesn't have permission → redirect to dashboard
+        navigate('/Dashboard');
+      }
     }
-  }, [token, loading, navigate]);
+  }, [token, loading, navigate, requiredRole, user]);
 
-  // Show nothing while restoring from cookies
+  // While restoring session
   if (loading) return null;
 
+  // ✅ Authorized → render child components
   return <>{children}</>;
 };
 

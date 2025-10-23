@@ -15,9 +15,5 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-// ✅ Admin-only route
-router.get('/admin/dashboard', authenticateToken, authorizeAdmin, (req, res) => {
-  res.json({ message: 'Welcome Admin!' });
-});
 
 export default router;

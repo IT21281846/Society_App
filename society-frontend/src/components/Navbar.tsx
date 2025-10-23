@@ -12,7 +12,7 @@ export default function Navbar() {
 
   const navLinks = [
     { path: '/Dashboard', label: 'Dashboard' },
-    { path: '/users', label: 'Users' },
+    ...(user?.role === "ADMIN" ? [{ path: '/users', label: 'Users' }] : []),
     { path: '/payments', label: 'Payments' },
   ];
 
@@ -40,7 +40,7 @@ export default function Navbar() {
           {/* Left: navigation links */}
           <div className="flex space-x-6">
             
-                       {user && (
+              {user && (
               <div className='flex gap-3'>
                 {navLinks.map((link) => (
               <Link

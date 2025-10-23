@@ -17,7 +17,10 @@ export default function Users() {
 
   useEffect(() => {
     api.get('/users')
-      .then(res => setUsers(res.data))
+      .then(res => {
+      const sortedUsers = res.data.sort((a: User, b: User) => a.id - b.id);
+      setUsers(sortedUsers);
+    })
       .catch(err => console.error('Failed to fetch users:', err))
       .finally(() => setLoading(false));
   }, []);
