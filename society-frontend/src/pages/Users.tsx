@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { X } from "lucide-react";
 import api from '../api/apiClient';
 
 interface User {
@@ -24,6 +25,18 @@ export default function Users() {
       .catch(err => console.error('Failed to fetch users:', err))
       .finally(() => setLoading(false));
   }, []);
+  // Delete user
+  const deleteUser = async (id: number) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+  if (!confirmDelete) return; 
+    try {
+      await api.delete(`/users/${id}`);
+      setUsers((prev) => prev.filter((e) => e.id !== id));
+    } catch (err) {
+      console.error("Error deleting user:", err);
+    }
+  };
+  
 
   if (loading) {
     return <p className="p-6 text-xl">Loading users...</p>;
@@ -55,6 +68,14 @@ export default function Users() {
                 <td className="px-4 py-2 border">{user.role}</td>
                 <td className="px-4 py-2 border">{new Date(user.createdAt).toLocaleDateString()}</td>
                 <td className="px-4 py-2 border">{new Date(user.updatedAt).toLocaleDateString()}</td>
+                {/* Delete Button */}
+                <td className="px-4 py-2 border">
+                  <button
+                    onClick={() => deleteUser(user.id)}
+                    className="bg-red-500 text-white text-sm px-3 py-2 hover:bg-red-600 rounded flex items-center">
+                    <X className="w-4 h-4 " /> Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
