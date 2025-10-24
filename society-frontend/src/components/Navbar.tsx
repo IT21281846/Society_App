@@ -14,6 +14,7 @@ export default function Navbar() {
     { path: '/Dashboard', label: 'Dashboard' },
     ...(user?.role === "ADMIN" ? [{ path: '/users', label: 'Users' }] : []),
     { path: '/payments', label: 'Payments' },
+    
   ];
 
   // ✅ Updated logout handler for cookie-based auth

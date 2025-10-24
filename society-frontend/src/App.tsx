@@ -6,6 +6,7 @@ import ProtectedRoute from './context/ProtectedRoute';
  import Dashboard from './pages/Dashboard/Dashboard';
  import Users from './pages/Users';
  import HomePage from './pages/Homepage';
+ import Profile from './pages/Profile'
 
 
 // import Payments from './pages/Payments';
@@ -20,9 +21,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute> } />
-        <Route path="/users"element={<ProtectedRoute requiredRole="ADMIN"><Users /></ProtectedRoute>
-  }
-/>
+        <Route path="/users"element={<ProtectedRoute requiredRole="ADMIN"><Users /></ProtectedRoute>}/>
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute> } />
 
       </Routes>
     </Router>
