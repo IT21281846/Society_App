@@ -12,7 +12,8 @@ export default function Profile() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    api.get("/profile").then((res) => {
+    api.get("/profiles").then((res) => {
+      console.log("Profile data received:", res.data);
       setFormData({
         firstName: res.data.firstName || "",
         lastName: res.data.lastName || "",
@@ -28,7 +29,7 @@ export default function Profile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await api.put("/profile", formData);
+      const res = await api.put("/profiles", formData);
       setMessage("Profile updated successfully!");
       setAuth(res.data.user, localStorage.getItem("token") || ""); // refresh context
     } catch (err) {
