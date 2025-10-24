@@ -14,6 +14,7 @@ export default function Navbar() {
     { path: '/Dashboard', label: 'Dashboard' },
     ...(user?.role === "ADMIN" ? [{ path: '/users', label: 'Users' }] : []),
     { path: '/payments', label: 'Payments' },
+   
     
   ];
 
@@ -62,14 +63,14 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {user && (
               <>
-                <div className="flex items-center space-x-2">
-                  <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
-                    {user.firstName?.[0]?.toUpperCase() || 'U'}
-                  </div>
-                  <span className="text-sm font-medium">
-                    Hello, <span className="text-yellow-400">{user.firstName}</span>
-                  </span>
+            <Link to="/profile" className="flex items-center space-x-2 hover:cursor-pointer">
+                <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
+                  {user.firstName?.[0]?.toUpperCase() || 'U'}
                 </div>
+                <span className="text-sm font-medium">
+                  Hello, <span className="text-yellow-400">{user.firstName}</span>
+                </span>
+              </Link>
 
                 <button
                   onClick={handleLogout}
