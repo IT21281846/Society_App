@@ -22,11 +22,12 @@ router.get("/", authenticateToken, async (req: any, res) => {
 // ✅ Update profile
 router.put("/", authenticateToken, async (req: any, res) => {
   try {
-    const { firstName, lastName, password } = req.body;
+    const { firstName, lastName,email, password } = req.body;
     const updateData: any = {};
 
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
+    if (email) updateData.email = email;
     if (password) updateData.password = await bcrypt.hash(password, 10);
 
     const updatedUser = await prisma.user.update({
