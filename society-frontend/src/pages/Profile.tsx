@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import api from "../api/apiClient";
 import { useAuth } from "../context/AuthContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import P_Background from '../assets/P_Background.jpg'
 
 export default function Profile() {
-  const { user, setAuth } = useAuth();
+  const { user } = useAuth();
 
   // Handle case when user is null
   if (!user) return <p className="text-center mt-10">Loading...</p>;
@@ -38,24 +41,26 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   if (formData.password && formData.password !== formData.confirmPassword) {
-    setMessage("Passwords do not match!");
-    return;
-  }
+      toast.error("Passwords do not match!");
+      return;
+    }
 
   try {
-    const res = await api.put("/profiles", formData);
-    setMessage("Profile updated successfully!");
-    setAuth(res.data.user, localStorage.getItem("token") || ""); // refresh context
+      await api.put("/profiles", formData);
+      setMessage("Profile updated successfully!");
+      
 
-    // ✅ Show alert and refresh page
-    alert("Profile updated successfully!");
-    window.location.reload(); // refresh page to reflect updated data
-  } catch (err) {
-    console.error(err);
-    setMessage("Failed to update profile.");
-    alert("Failed to update profile!");
-  }
-};
+      // ✅ Toast success message
+      toast.success("Profile updated successfully!");
+
+      // Refresh page after 2 sec to reflect updates
+      setTimeout(() => window.location.reload(), 2000);
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to update profile.");
+      toast.error("Failed to update profile!");
+    }
+  };
 
 
 return (
@@ -173,6 +178,15 @@ return (
       </form>
     </div>
   </div>
+  <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"/>
+
   </div>
 );
 
