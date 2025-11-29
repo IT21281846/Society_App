@@ -54,7 +54,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       toast.success("Profile updated successfully!");
 
       // Refresh page after 2 sec to reflect updates
-      setTimeout(() => window.location.reload(), 2000);
+      setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
       console.error(err);
       setMessage("Failed to update profile.");
