@@ -10,11 +10,14 @@ export default function Dashboard() {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <UserCount />
-      <CalendarCard />
-      <RecentUsers />
+      <div className="p-2 grid lg:grid-cols-2 ">
+
+          <div className=""><UserCount /></div>         
+          <div className="flex justify-end"><CalendarCard /></div>
+      
       </div>
+      <RecentUsers />
+      
 
 
     </div>
