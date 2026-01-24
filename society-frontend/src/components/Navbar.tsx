@@ -63,14 +63,22 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {user && (
               <>
-            <Link to="/profile" className="flex items-center space-x-2 hover:cursor-pointer">
-                <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
-                  {user.firstName?.[0]?.toUpperCase() || 'U'}
-                </div>
-                <span className="text-sm font-medium">
-                  Hello, <span className="text-yellow-400">{user.firstName}</span>
-                </span>
-              </Link>
+        <Link to="/profile" className="flex items-center space-x-2 hover:cursor-pointer">
+          <div className="bg-yellow-400 text-black rounded-full h-8 w-8 flex items-center justify-center font-semibold">
+            {user.firstName?.[0]?.toUpperCase() || "U"}
+          </div>
+
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm font-medium">
+              Hello, <span className="text-yellow-400">{user.firstName}</span>
+            </span>
+
+            <span className="text-[10px] text-gray-400">
+              Click to update profile
+            </span>
+          </div>
+        </Link>
+
 
                 <button
                   onClick={handleLogout}

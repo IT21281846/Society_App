@@ -40,7 +40,7 @@ export default function UserCount () {
   const pendingPayments = payments.filter((p) => p.status === 'PENDING').length;
 
 
-    return(
+    return( 
         <div>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-blue-500 text-white p-4 rounded shadow">
